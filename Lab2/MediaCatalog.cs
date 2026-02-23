@@ -1,12 +1,20 @@
-﻿using System;
+﻿using System.Collections;
 
 namespace MediaCatalogApp
 {
-	public class MediaCatalog
+	public class MediaCatalog : IEnumerable
 	{
 		private const int MaxItems = 200;
 		private MediaItem[] items = new MediaItem[MaxItems];
 		private int count = 0;
+
+		public int Count
+		{
+			get
+			{
+				return count;
+			}
+		}
 
 		public void AddItem(string title, MediaType type, double rating)
 		{
@@ -96,6 +104,41 @@ namespace MediaCatalogApp
 			for (int i = 0; i < count; i++) sum += items[i].Rating;
 
 			Console.WriteLine($"Середній рейтинг: {sum / count:F2}");
+		}
+
+		public void RemoveAt(int index)
+		{
+			for (int i = index; i < count - 1; i++)
+			{
+				items[i] = items[i + 1];
+			}
+			count--;
+		}
+
+		public MediaItem GetAt(int index)
+		{
+			return items[index];
+		}
+
+		public void SetAt(int index, MediaItem item)
+		{
+			items[index] = item;
+		}
+
+		public IEnumerator GetEnumerator()
+		{
+			return new Enumerator(this);
+		}
+
+		public void SortbyRating()
+		{
+			Array.Sort(items,0,count);
+		}
+
+
+		public void SortByTitles()
+		{
+Array.Sort(items,0,count, new Comparer());
 		}
 	}
 }
